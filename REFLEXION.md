@@ -1,27 +1,21 @@
 
 
-# Reflexión Aplicada
+# Reflexión - Laboratorio 2
 
-## 1. Token Único
+## 1. Imagen y atributo alt
 
-El Token Único generado para este trabajo es:
+La imagen guardada en la carpeta `img/` se llama `foto_javier.jpg`.
 
-chavarria-7037-55
+El valor del atributo `alt` utilizado en `acercade.html` es:
 
-## 2. Salida de git status antes del primer commit
+`Foto de Javier Chavarria`
 
-La salida obtenida al ejecutar `git status` justo antes de realizar el primer commit fue:
+## 2. Uso de etiquetas semánticas
 
-    On branch master
+Es importante utilizar etiquetas semánticas como `<main>` y `<nav>` porque permiten identificar la función que cumple cada parte de una página web. A diferencia de una etiqueta genérica como `<div>`, las etiquetas semánticas ayudan a organizar y comprender mejor la estructura del sitio.
 
-    No commits yet
+## 3. Verificación de las rutas de navegación
 
-    Changes to be committed:
-      (use "git rm --cached <file>..." to unstage)
-            new file:   index.html
+Primero verifiqué las rutas de manera local abriendo `index.html` en el navegador. Desde la página de inicio accedí a `acercade.html` mediante el enlace "Acerca de" y luego regresé a `index.html` mediante el enlace "Inicio".
 
-## 3. Diferencia entre staging area y working directory
-
-El working directory es el lugar donde se encuentran los archivos del proyecto en los que estoy trabajando y realizando modificaciones.
-
-El staging area es un área intermedia donde se agregan los cambios que quiero incluir en el próximo commit. De esta manera, puedo elegir qué modificaciones guardar antes de realizar el commit.
+Después de publicar los cambios, verificaré nuevamente ambos enlaces desde la página desplegada en GitHub Pages para comprobar que las rutas relativas funcionen correctamente.
