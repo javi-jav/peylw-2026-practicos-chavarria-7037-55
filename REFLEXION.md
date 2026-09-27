@@ -19,3 +19,18 @@ Es importante utilizar etiquetas semánticas como `<main>` y `<nav>` porque perm
 Primero verifiqué las rutas de manera local abriendo `index.html` en el navegador. Desde la página de inicio accedí a `acercade.html` mediante el enlace "Acerca de" y luego regresé a `index.html` mediante el enlace "Inicio".
 
 Después de publicar los cambios, verifiqué nuevamente ambos enlaces desde la página desplegada en GitHub Pages y comprobé que las rutas relativas funcionaban correctamente.
+
+# Reflexión - Trabajo Práctico 3
+
+## 1. Código Postal y validación mediante pattern
+
+El código HTML utilizado para definir el campo Código Postal es:
+
+```html
+<label for="codigo-postal">Código Postal:</label>
+<input
+    type="text"
+    id="codigo-postal"
+    name="codigo-postal"
+    pattern="^[A-Z]\d{4}[A-Z]{3}$"
+    title="Ingrese el código postal con el formato R8500AAF">
