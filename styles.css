@@ -1,5 +1,4 @@
 
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
 /*
@@ -86,6 +85,12 @@ main {
     background-color: white;
     z-index: 10;
     padding: 10px 0;
+}
+
+/* TP5: CONTENIDO OCULTO DE LA BIOGRAFIA */
+
+.cv-completo {
+    display: none;
 }
 
 /* FORMULARIO */
