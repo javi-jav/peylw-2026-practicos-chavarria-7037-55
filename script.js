@@ -131,3 +131,160 @@ if (botonLeerMas && cvCompleto) {
 }
 
 
+
+
+// TP6: MEMOTEST DE OCHO PARES
+// La lógica se encapsula para no exponer las cartas ni sus valores en variables globales.
+(function () {
+    const tablero = document.getElementById("juego-tablero");
+    if (!tablero) return; // No intervenir en las otras páginas del portal.
+
+    const token = "chavarria-7037-55";
+    const claveRecord = "memotest-record-" + token;
+    const iconos = ["🚀", "💻", "🎮", "🌐", "🧠", "⭐", "🔒", "🎨"];
+    const intentosElemento = document.getElementById("juego-intentos");
+    const puntosElemento = document.getElementById("juego-puntos");
+    const recordElemento = document.getElementById("juego-record");
+    const mensajeElemento = document.getElementById("juego-mensaje");
+    const reiniciarBoton = document.getElementById("btn-reiniciar-" + token);
+
+    let cartas = [];
+    let primeraCarta = null;
+    let segundaCarta = null;
+    let bloqueado = false;
+    let intentos = 0;
+    let puntos = 0;
+    let temporizador = null;
+    let record = null;
+
+    function leerRecord() {
+        try {
+            const guardado = localStorage.getItem(claveRecord);
+            const numero = Number(guardado);
+            record = guardado !== null && Number.isInteger(numero) && numero >= 8 ? numero : null;
+        } catch (error) {
+            record = null;
+            mensajeElemento.textContent = "El navegador no permite acceder al récord guardado.";
+        }
+        mostrarRecord();
+    }
+
+    function guardarRecord() {
+        if (record === null || intentos < record) {
+            record = intentos;
+            try {
+                localStorage.setItem(claveRecord, String(record));
+            } catch (error) {
+                mensajeElemento.textContent = "¡Ganaste! No se pudo guardar el récord en este navegador.";
+            }
+            mostrarRecord();
+        }
+    }
+
+    function mostrarRecord() {
+        recordElemento.textContent = record === null ? "Sin récord todavía" : record + " intentos - " + token;
+    }
+
+    function mezclar(valores) {
+        for (let i = valores.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [valores[i], valores[j]] = [valores[j], valores[i]];
+        }
+        return valores;
+    }
+
+    function actualizarEstadisticas() {
+        intentosElemento.textContent = String(intentos);
+        puntosElemento.textContent = String(puntos);
+    }
+
+    function mostrarCarta(carta) {
+        carta.elemento.classList.add("descubierta");
+        carta.elemento.textContent = carta.simbolo;
+        carta.elemento.setAttribute("aria-label", "Carta descubierta: " + carta.simbolo);
+        carta.elemento.setAttribute("aria-pressed", "true");
+    }
+
+    function ocultarCarta(carta) {
+        carta.elemento.classList.remove("descubierta");
+        carta.elemento.textContent = "?";
+        carta.elemento.setAttribute("aria-label", "Carta oculta " + (carta.indice + 1));
+        carta.elemento.setAttribute("aria-pressed", "false");
+    }
+
+    function seleccionarCarta(carta) {
+        if (bloqueado || carta.encontrada || carta === primeraCarta) return;
+        mostrarCarta(carta);
+        if (primeraCarta === null) {
+            primeraCarta = carta;
+            mensajeElemento.textContent = "Elegí otra carta para buscar su pareja.";
+            return;
+        }
+
+        segundaCarta = carta;
+        intentos++;
+        actualizarEstadisticas();
+        if (primeraCarta.simbolo === segundaCarta.simbolo) {
+            primeraCarta.encontrada = true;
+            segundaCarta.encontrada = true;
+            primeraCarta.elemento.classList.add("encontrada");
+            segundaCarta.elemento.classList.add("encontrada");
+            primeraCarta.elemento.disabled = true;
+            segundaCarta.elemento.disabled = true;
+            puntos++;
+            actualizarEstadisticas();
+            primeraCarta = null;
+            segundaCarta = null;
+            mensajeElemento.textContent = "¡Encontraste un par!";
+            if (puntos === 8) {
+                mensajeElemento.textContent = "¡Ganaste! Encontraste los 8 pares en " + intentos + " intentos.";
+                guardarRecord();
+            }
+        } else {
+            bloqueado = true;
+            mensajeElemento.textContent = "No coinciden. ¡Probá de nuevo!";
+            const cartaA = primeraCarta;
+            const cartaB = segundaCarta;
+            temporizador = setTimeout(function () {
+                ocultarCarta(cartaA);
+                ocultarCarta(cartaB);
+                primeraCarta = null;
+                segundaCarta = null;
+                bloqueado = false;
+                temporizador = null;
+            }, 950);
+        }
+    }
+
+    function nuevaPartida() {
+        if (temporizador !== null) {
+            clearTimeout(temporizador);
+            temporizador = null;
+        }
+        primeraCarta = null;
+        segundaCarta = null;
+        bloqueado = false;
+        intentos = 0;
+        puntos = 0;
+        tablero.replaceChildren();
+        actualizarEstadisticas();
+        leerRecord();
+        mensajeElemento.textContent = "¡Empezá eligiendo una carta!";
+        cartas = mezclar([...iconos, ...iconos]).map(function (simbolo, indice) {
+            const boton = document.createElement("button");
+            boton.type = "button";
+            boton.id = "carta-" + token + "-" + indice;
+            boton.className = "juego-carta";
+            boton.textContent = "?";
+            boton.setAttribute("aria-label", "Carta oculta " + (indice + 1));
+            boton.setAttribute("aria-pressed", "false");
+            const carta = { simbolo: simbolo, indice: indice, encontrada: false, elemento: boton };
+            boton.addEventListener("click", function () { seleccionarCarta(carta); });
+            tablero.appendChild(boton);
+            return carta;
+        });
+    }
+
+    reiniciarBoton.addEventListener("click", nuevaPartida);
+    nuevaPartida();
+})();

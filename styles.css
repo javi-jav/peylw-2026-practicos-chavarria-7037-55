@@ -228,3 +228,29 @@ footer {
         overflow-x: auto;
     }
 }
+
+
+/* TP6: MEMOTEST */
+.pagina-juego { padding-top: 250px; }
+.juego-contenedor { max-width: 780px; margin: 0 auto; background: white; padding: 24px; border-radius: 12px; box-shadow: 0 5px 18px rgba(0,0,0,.08); }
+.juego-contenedor h2 { color: hsl(205, 65%, 28%); overflow-wrap: anywhere; }
+.juego-estadisticas { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; }
+.juego-estadisticas p { flex: 1 1 150px; padding: 12px; margin: 0; background: hsl(205,35%,90%); border-radius: 8px; }
+.juego-tablero { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; max-width: 600px; margin: 20px auto; }
+.juego-carta { display: grid; place-items: center; width: 100%; aspect-ratio: 1 / 1; padding: 0; font-size: clamp(1.5rem, 5vw, 2.8rem); font-weight: 700; cursor: pointer; background: hsl(205,65%,38%); color: white; border: 2px solid transparent; border-radius: 10px; transition: background-color .25s ease, transform .25s ease, box-shadow .25s ease; }
+.juego-carta:hover:not(:disabled) { background: hsl(205,65%,28%); transform: translateY(-2px); }
+.juego-carta.descubierta { background: hsl(205,35%,90%); color: hsl(205,65%,28%); transform: rotateY(0deg); }
+.juego-carta.encontrada { background: #ccefd7; color: #16552a; cursor: default; }
+.juego-carta:focus-visible, .juego-reiniciar:focus-visible { outline: 3px solid #d77d12; outline-offset: 3px; }
+.juego-mensaje { min-height: 2em; font-weight: 600; text-align: center; }
+.juego-reiniciar { display: block; margin: 12px auto; cursor: pointer; transition: background-color .2s ease; }
+.juego-reiniciar:hover { background: hsl(205,65%,28%); }
+@media (max-width: 768px) {
+    .pagina-juego { padding-top: 250px; }
+    .juego-contenedor { padding: 14px; }
+    .juego-tablero { gap: 7px; }
+    .juego-carta { border-radius: 7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .juego-carta, .juego-reiniciar { transition: none; }
+}

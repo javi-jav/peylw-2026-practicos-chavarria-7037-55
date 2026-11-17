@@ -164,3 +164,42 @@ if (botonLeerMas && cvCompleto) {
 De esta manera, el código del botón "Leer más" solamente se ejecuta cuando existen tanto el botón como el contenedor de la biografía.
 
 Estas verificaciones evitan intentar utilizar elementos inexistentes y permiten compartir el mismo archivo JavaScript entre ambas páginas sin generar errores en la consola.
+
+
+---
+
+## Laboratorio 6: Memotest interactivo
+
+**1. ¿Qué opción de juego seleccionó?**
+
+Seleccioné **Memoria con Cartas (Memotest)**, con 8 pares de cartas (16 cartas en total). El jugador descubre dos cartas por turno. Si coinciden, permanecen visibles; de lo contrario, se ocultan luego de 950 milisegundos. El objetivo es encontrar todos los pares usando la menor cantidad posible de intentos.
+
+**2. Fragmento literal de JavaScript para leer y guardar el récord con `localStorage`:**
+
+Lectura (`getItem`), dentro de `leerRecord()`:
+
+```javascript
+const guardado = localStorage.getItem(claveRecord);
+const numero = Number(guardado);
+record = guardado !== null && Number.isInteger(numero) && numero >= 8 ? numero : null;
+```
+
+Escritura (`setItem`), dentro de `guardarRecord()`:
+
+```javascript
+if (record === null || intentos < record) {
+    record = intentos;
+    try {
+        localStorage.setItem(claveRecord, String(record));
+    } catch (error) {
+        mensajeElemento.textContent = "¡Ganaste! No se pudo guardar el récord en este navegador.";
+    }
+    mostrarRecord();
+}
+```
+
+El récord se identifica con una clave que incluye mi token (`memotest-record-chavarria-7037-55`). Como el objetivo es usar menos intentos, solo se reemplaza cuando la nueva partida tiene un resultado menor.
+
+**3. ¿Cómo evitó que el usuario descubra las respuestas mediante variables globales?**
+
+Encapsulé toda la lógica del Memotest en una función autoejecutable (`IIFE`). Los símbolos, el arreglo mezclado de cartas y el estado de cada turno se declaran dentro de esa función, sin asignarse a propiedades globales de `window`. Además, cada botón muestra inicialmente `?` y el símbolo se incorpora al DOM únicamente cuando el usuario descubre la carta. Durante la espera entre dos cartas incorrectas se bloquean los clics para impedir turnos adicionales. Esto dificulta consultar directamente las respuestas desde variables globales, aunque no constituye una protección absoluta frente a alguien que inspeccione o modifique el código del navegador.
